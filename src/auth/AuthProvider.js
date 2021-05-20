@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import firebase from "firebase/app";
 import { app, db } from "../base.js";
+import liff from '@line/liff';
 
 
 // contextの作成
@@ -22,6 +24,17 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password, history) => {
     try {
       await app.auth().createUserWithEmailAndPassword(email, password);
+      const userRef = await db.collection('users').doc()
+      const userProfile = await liff.getProfile()
+      const user = await firebase.auth().currentUser;
+      await userRef.set({
+        id: user.uid,
+        lineuid: userProfile.userId,
+        displayName: userProfile.displayName,
+        mail: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
       history.push("/");
     } catch (error) {
       alert(error);

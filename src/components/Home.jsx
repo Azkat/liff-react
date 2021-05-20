@@ -2,7 +2,7 @@ import React from "react";
 import { app, db } from "../base.js";
 
 async function getUsers(){
-  const userRef = db.collection('user').doc('9yvOmyYlVzhpnnzLhvOl')
+  const userRef = db.collection('users').doc('9yvOmyYlVzhpnnzLhvOl')
   const userDoc = await userRef.get()
 
   return userDoc.get('mail')
